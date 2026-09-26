@@ -119,6 +119,48 @@
     }
     .bad{color:#c62828;font-weight:800}
     .good{color:#168a58;font-weight:800}
+    .scanner-input{
+      width:100%;
+      min-height:110px;
+      margin-top:12px;
+      padding:14px;
+      border:1px solid rgba(37,99,235,.18);
+      border-radius:14px;
+      background:#fff;
+      color:var(--ink);
+      font:inherit;
+      resize:vertical;
+      outline:none;
+    }
+    .scanner-input:focus{border-color:var(--blue)}
+    .scanner-button{
+      display:inline-block;
+      margin-top:14px;
+      padding:13px 22px;
+      border:0;
+      border-radius:14px;
+      background:var(--gold);
+      color:#3b2b00;
+      font-weight:900;
+      font-size:16px;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(244,180,0,.20);
+    }
+    .scanner-button:disabled{opacity:.65;cursor:wait}
+    .scan-result{
+      display:none;
+      margin-top:18px;
+      padding-top:18px;
+      border-top:1px solid rgba(37,99,235,.12);
+    }
+    .scan-list{list-style:none;padding:0;margin:8px 0 16px}
+    .scan-item{margin:7px 0}
+    .corrected{
+      background:#fff;
+      border-radius:14px;
+      padding:14px 16px;
+      border-left:5px solid var(--teal);
+    }
     footer{
       text-align:center;margin-top:38px;color:#6c8093;font-size:14px;
     }
@@ -164,9 +206,100 @@
       <strong>Қазақша нұсқасы:</strong><br>
       Мен <span class="good">дүкенге</span> барып, <span class="good">кейін</span> досыма
       <span class="good">қоңырау шалдым</span>.
+
+      <textarea id="inputText" class="scanner-input" placeholder="Мысалы: привет досым бүгін футбол ойнайсың ба?"></textarea>
+      <button id="scanBtn" class="scanner-button" onclick="scanText()">Тексеру / Өңдеу</button>
+
+      <div id="resultBox" class="scan-result">
+        <strong>Анықталған аралас сөздер:</strong>
+        <ul id="wordList" class="scan-list"></ul>
+        <strong>Қазақша сауатты нұсқасы:</strong>
+        <div id="correctedText" class="corrected"></div>
+      </div>
     </div>
 
     <footer>HYBRID SCAN KZ • Тілді құрметтеу — сауатты қолданыстан басталады.</footer>
   </div>
+
+  <script>
+    const quickDict = {
+      "привет":"сәлем","пока":"сау бол","баняға":"моншаға","баня":"монша",
+      "магазинге":"дүкенге","магазиннен":"дүкеннен","магазин":"дүкен",
+      "потом":"кейін","звондадым":"қоңырау шалдым","звондады":"қоңырау шалды",
+      "кстати":"айтпақшы","вообще":"жалпы","проблема":"мәселе","спасибо":"рахмет"
+    };
+
+    async function checkAndTranslate(word) {
+      try {
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=kk&dt=t&q=${encodeURIComponent(word)}`);
+        const data = await res.json();
+        const detectedLang = data[2];
+        const translatedWord = (data && data[0] && data[0][0] && data[0][0][0]) ? data[0][0][0] : word;
+
+        if (detectedLang === "ru" && translatedWord.toLowerCase() !== word.toLowerCase()) {
+          return { isRussian: true, translated: translatedWord.toLowerCase() };
+        }
+        return { isRussian: false, translated: word };
+      } catch (e) {
+        return { isRussian: false, translated: word };
+      }
+    }
+
+    async function scanText() {
+      const text = document.getElementById("inputText").value;
+      const wordListEl = document.getElementById("wordList");
+      const correctedTextEl = document.getElementById("correctedText");
+      const resultBox = document.getElementById("resultBox");
+      const btn = document.getElementById("scanBtn");
+
+      if (!text.trim()) return;
+
+      btn.innerText = "Тексерілуде...";
+      btn.disabled = true;
+      wordListEl.innerHTML = "";
+
+      const tokens = text.split(/([\s,.!?:;"]+)/);
+      const updatedTokens = [];
+      const foundMap = new Map();
+
+      for (const token of tokens) {
+        const cleanWord = token.trim().toLowerCase();
+
+        if (cleanWord && /^[а-яёәғқңөұүһі]+$/i.test(cleanWord)) {
+          if (quickDict[cleanWord]) {
+            foundMap.set(token.trim(), quickDict[cleanWord]);
+            updatedTokens.push(quickDict[cleanWord]);
+          } else {
+            const res = await checkAndTranslate(cleanWord);
+            if (res.isRussian) {
+              foundMap.set(token.trim(), res.translated);
+              updatedTokens.push(res.translated);
+            } else {
+              updatedTokens.push(token);
+            }
+          }
+        } else {
+          updatedTokens.push(token);
+        }
+      }
+
+      if (foundMap.size === 0) {
+        wordListEl.innerHTML = '<li class="good">✅ Аралас сөздер табылмады! Мәтін таза.</li>';
+        correctedTextEl.innerText = text;
+      } else {
+        foundMap.forEach((right, wrong) => {
+          const li = document.createElement("li");
+          li.className = "scan-item";
+          li.innerHTML = '<span class="bad">🔴 ' + wrong + '</span> → <span class="good">🟢 ' + right + '</span>';
+          wordListEl.appendChild(li);
+        });
+        correctedTextEl.innerText = updatedTokens.join("");
+      }
+
+      resultBox.style.display = "block";
+      btn.innerText = "Тексеру / Өңдеу";
+      btn.disabled = false;
+    }
+  </script>
 </body>
 </html>

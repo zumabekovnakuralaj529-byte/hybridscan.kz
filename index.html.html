@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HYBRID SCAN KZ — Басты бет макеті</title>
+  <style>
+    :root{
+      --bg1:#fff8e8;
+      --bg2:#eef7ff;
+      --blue:#2563eb;
+      --teal:#0f9f8f;
+      --gold:#f4b400;
+      --ink:#17324d;
+      --card:#ffffff;
+      --muted:#587089;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 15% 15%, #fff1b8 0, transparent 28%),
+        radial-gradient(circle at 85% 20%, #ccecff 0, transparent 30%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      min-height:100vh;
+    }
+    .wrap{max-width:1050px;margin:0 auto;padding:28px 20px 60px}
+    .top{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:10px 4px 30px;
+    }
+    .brand{
+      font-weight:900;letter-spacing:1px;color:var(--blue);
+      font-size:20px;
+    }
+    .tag{
+      font-size:14px;color:#fff;background:var(--teal);
+      padding:8px 14px;border-radius:999px;font-weight:700;
+    }
+    .hero{
+      background:rgba(255,255,255,.86);
+      border:1px solid rgba(37,99,235,.10);
+      border-radius:28px;
+      padding:54px 46px;
+      box-shadow:0 18px 55px rgba(42,76,120,.12);
+      text-align:center;
+      backdrop-filter: blur(4px);
+    }
+    h1{
+      margin:0;
+      font-size:clamp(42px,7vw,78px);
+      line-height:.98;
+      color:var(--blue);
+      font-weight:950;
+      letter-spacing:1px;
+    }
+    .lead{
+      margin:18px auto 10px;
+      font-size:clamp(22px,3vw,34px);
+      font-weight:850;
+      color:var(--ink);
+    }
+    .quote{
+      margin:24px auto 28px;
+      max-width:760px;
+      background:#fff8d9;
+      border-left:7px solid var(--gold);
+      border-radius:16px;
+      padding:18px 22px;
+      font-size:clamp(20px,2.4vw,28px);
+      font-weight:800;
+      font-style:italic;
+      color:#5b4710;
+    }
+    .sub{
+      margin:0 auto;
+      max-width:750px;
+      font-size:19px;
+      line-height:1.6;
+      color:var(--muted);
+    }
+    .cta{
+      display:inline-block;
+      margin-top:28px;
+      padding:15px 26px;
+      border-radius:14px;
+      background:var(--gold);
+      color:#3b2b00;
+      font-weight:900;
+      text-decoration:none;
+      box-shadow:0 8px 20px rgba(244,180,0,.25);
+    }
+    .section-title{
+      text-align:center;
+      margin:46px 0 20px;
+      font-size:30px;
+      color:var(--ink);
+    }
+    .grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+    }
+    .card{
+      background:rgba(255,255,255,.92);
+      border-radius:20px;
+      padding:24px;
+      box-shadow:0 10px 28px rgba(42,76,120,.09);
+      border:1px solid rgba(15,159,143,.10);
+    }
+    .card b{display:block;color:var(--teal);font-size:18px;margin-bottom:8px}
+    .example{
+      margin-top:18px;
+      background:#f7fbff;
+      border-radius:18px;
+      padding:24px;
+      line-height:1.8;
+      font-size:18px;
+    }
+    .bad{color:#c62828;font-weight:800}
+    .good{color:#168a58;font-weight:800}
+    footer{
+      text-align:center;margin-top:38px;color:#6c8093;font-size:14px;
+    }
+    @media (max-width:760px){
+      .hero{padding:38px 22px}
+      .grid{grid-template-columns:1fr}
+      .top{align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">HYBRID SCAN KZ</div>
+      <div class="tag">Қазақша сөйлеуіңді тексер</div>
+    </div>
+
+    <section class="hero">
+      <h1>HYBRID SCAN KZ</h1>
+      <div class="lead">Аралас сөзді байқа. Қазақшасын тап.</div>
+
+      <div class="quote">«Өзге тілдің бәрін біл, өз тіліңді құрметте!»</div>
+
+      <p class="sub">
+        Мәтініңді енгіз. Hybrid Scan KZ аралас қолданыстарды байқап,
+        қазақша баламасын ұсынады. Сөйлеміңді сауатты әрі табиғи құрастыруға көмектеседі.
+      </p>
+
+      <a class="cta" href="#example">Тексеріп көру</a>
+    </section>
+
+    <h2 class="section-title">Қалай жұмыс істейді?</h2>
+    <div class="grid">
+      <div class="card"><b>1. Мәтінді енгіз</b>Қазақша сөйлеміңді немесе шағын мәтініңді жаз.</div>
+      <div class="card"><b>2. Аралас сөзді тап</b>Жүйе орынсыз араласқан сөздерді байқатады.</div>
+      <div class="card"><b>3. Қазақшасын таңда</b>Ұсынылған баламамен сөйлемді сауатты құрастыр.</div>
+    </div>
+
+    <div class="example" id="example">
+      <strong>Мысал:</strong><br>
+      Мен <span class="bad">магазинге</span> барып, <span class="bad">потом</span> досыма
+      <span class="bad">звондадым</span>.<br><br>
+      <strong>Қазақша нұсқасы:</strong><br>
+      Мен <span class="good">дүкенге</span> барып, <span class="good">кейін</span> досыма
+      <span class="good">қоңырау шалдым</span>.
+    </div>
+
+    <footer>HYBRID SCAN KZ • Тілді құрметтеу — сауатты қолданыстан басталады.</footer>
+  </div>
+</body>
+</html>
